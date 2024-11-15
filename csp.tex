@@ -1,0 +1,96 @@
+\begin{itemize}
+    \item Basic form
+        \begin{equation*}\hspace*{-3cm}
+            \uncover<2>{x_k^{(l+1)} = \frac{1}{deg\left( u_k \right)}\sum_{\substack{j \\ u_k \in v_j}}} \frac{1}{deg \left( v_j \right)}\sum_{\substack{i \\ u_i \in v_j}} x_i^{(l)}
+        \end{equation*}
+    \item Matrix form    
+        \begin{equation*}\hspace*{-3cm}
+        \uncover<2>{\X^{(l+1)} = \D^{-1} \HH} \B^{-1} \HH^T \X^{(l)}
+        \end{equation*}
+    \item SQL implementation (1 layer)
+    \begin{onlyenv}<1>
+        \begin{lstlisting}[language=SQL,basicstyle=\small]
+
+
+    SELECT nodeId, AVG(X) OVER (PARTITION BY edgeId) AS my FROM graph
+
+
+        \end{lstlisting}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{lstlisting}[language=SQL,basicstyle=\small]
+SELECT nodeId, AVG(my) AS score
+FROM (
+    SELECT nodeId, AVG(X) OVER (PARTITION BY edgeId) AS my FROM graph
+)
+GROUP BY nodeId;
+        \end{lstlisting}
+    \end{onlyenv}
+\end{itemize}
+
+
+\begin{tikzpicture}[remember picture,overlay]
+  \tikzset{shift={(current page.center)},yshift=5cm, xshift=4.5cm}
+  \tikzset{node/.style={draw,circle}}
+  \tikzset{edge/.style={draw,rectangle,inner sep=2pt}}
+
+\tikzset{nodepos/.style={draw,circle, fill=red!20!white}}
+\tikzset{nodestress/.style={draw,circle, ultra thick}}
+\uncover<2>{
+\begin{scope}[node distance=1cm, circle, draw=black]
+	\node[nodepos, opacity=0.2] at  (0, -2) (x1) {$\uu_1$};
+    \node[nodepos, opacity=0.2, below of=x1] (x2) {$\uu_2$};
+    \node[nodestress, below of=x2] (x3) {$\uu_3$};
+    \node[node, opacity=0.2, below of=x3] (x4) {$\uu_4$};
+    \node[node, opacity=0.2, below of=x4] (x5) {$\uu_5$};
+\end{scope}
+    
+\begin{scope}[node distance=1.2cm]
+    \node[node] at (1.8,-2) (e1) {$\vv_1$};
+    \node[node, below of=e1, opacity=0.2] (e2) {$\vv_2$};
+    \node[node, below of=e2, opacity=0.2] (e3) {$\vv_3$};
+    \node[node, below of=e3] (e4) {$\vv_4$};
+\end{scope}
+
+  \draw (e1) -- (x3);
+  \draw[opacity=0.2] (e1) -- (x1);
+  \draw[opacity=0.2] (e1) -- (x2);
+  \draw[opacity=0.2] (e2) -- (x2);
+  \draw[opacity=0.2] (e2) -- (x1);
+  \draw[opacity=0.2] (e4) -- (x1);
+  \draw[opacity=0.2] (e1) -- (x5);
+  \draw[opacity=0.2] (e2) -- (x4);
+  \draw (e4) -- (x3);
+  \draw[opacity=0.2] (e3) -- (x4);
+  \draw[opacity=0.2] (e3) -- (x5);
+}
+
+\uncover<1>{
+\begin{scope}[node distance=1cm, circle, draw=black]
+    \node[nodepos] at (0, -2) (x1) {$\uu_1$};
+    \node[nodepos, below of=x1] (x2) {$\uu_2$};
+    \node[node, below of=x2] (x3) {$\uu_3$};
+    \node[node, opacity=0.2, below of=x3] (x4) {$\uu_4$};
+    \node[node, below of=x4] (x5) {$\uu_5$};
+\end{scope}
+    
+\begin{scope}[node distance=1.2cm]
+    \node[nodestress] at (1.8,-2)  (e1) {$\vv_1$};
+    \node[node, below of=e1, opacity=0.2] (e2) {$\vv_2$};
+    \node[node, below of=e2, opacity=0.2] (e3) {$\vv_3$};
+    \node[nodestress, below of=e3] (e4) {$\vv_4$};
+\end{scope}
+
+  \draw (e1) -- (x3);
+  \draw (e1) -- (x1);
+  \draw (e1) -- (x2);
+  \draw[opacity=0.2] (e2) -- (x2);
+  \draw[opacity=0.2] (e2) -- (x1);
+  \draw (e4) -- (x1);
+  \draw (e1) -- (x5);
+  \draw[opacity=0.2] (e2) -- (x4);
+  \draw (e4) -- (x3);
+  \draw[opacity=0.2] (e3) -- (x4);
+  \draw[opacity=0.2] (e3) -- (x5);
+}
+\end{tikzpicture}

@@ -1,0 +1,364 @@
+%\documentclass{beamer}
+%
+\documentclass[aspectratio=169]{beamer}
+\setbeamertemplate{navigation symbols}{}
+
+\usepackage{calc}
+\usepackage{booktabs}
+\usepackage{fp}
+\usepackage{times}
+\usepackage{xcolor}
+\usepackage{graphicx}
+%\usepackage{fourier}
+%\usepackage[latin1]{inputenc}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{animate}
+\usepackage{ifthen}
+\usepackage{todonotes}
+\usepgfplotslibrary{fillbetween}
+\usepackage{bm}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{fontspec}
+
+\usetikzlibrary{arrows,automata,shapes,calc, patterns, backgrounds}
+\usepackage{polyglossia}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{listings}
+\input{images/tikzlib}
+
+
+\input{notation}
+
+\usepackage[backend = biber, style = iso-authoryear, sortlocale = en_US, autolang = other, bibencoding = UTF8]{biblatex}
+\usepackage{datetime}
+%\usepackage[utf8]{inputenc}
+\usepackage{fontspec}
+\usepackage{microtype}
+
+\lstset{basicstyle={\small\ttfamily},
+  belowskip=3mm,
+  breakatwhitespace=true,
+  breaklines=true,
+  classoffset=0,
+  columns=flexible,
+  emptylines=10,
+  framexleftmargin=0.25em,
+  frameshape={}{}{}{}, %To remove to vertical lines on left, set `frameshape={}{}{}{}`
+  keywordstyle=\color{blue},
+  numbers=none, %If you want line numbers, set `numbers=left`
+  numberstyle=\color{gray},
+  showlines=true,
+  showstringspaces=false,
+  stringstyle=\color{mauve},
+  tabsize=3,
+  xleftmargin =1em
+}
+
+%\usetikzlibrary{external}
+%\tikzexternalize[prefix=tikz/]
+
+\makeatletter
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.3\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}Pavel Procházka et al.
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.45\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}CSP: A Simple Scalable Algorithm for Hypergraphs
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{4em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\makeatother
+
+\def\ClusterGNN{\tiny{Chiang, Wei-Lin and Liu, Xuanqing and Si, Si and Li, Yang and Bengio, Samy and Hsieh, Cho-Jui.
+  {\textcolor{blue}{"Cluster-gcn: An efficient algorithm for training deep and large graph convolutional networks"}}. {\it 25th ACM SIGKDD ,
+ p. 257--266 2019}.}}
+
+\title{Convolutional Signal Propagation: A Simple Scalable Algorithm for Hypergraphs}
+
+\author{Pavel Procházka\inst{1}, \underline{Marek Dědič}\inst{1,2}, Lukáš Bajer\inst{1}}
+    \institute{Cisco Systems, Inc. \and
+    Faculty of Nuclear Sciences and Physical Engineering, Czech Technical University in Prague}
+
+
+\date[DDny KM FJFI]{Doktorandské dny KM FJFI, 15. 11. 2024}
+
+\begin{document}
+
+
+
+ \frame{
+    \titlepage
+}
+
+% 30 s
+
+%\begin{frame}
+%    \frametitle{Motivation -- Data Science in Real World (Cybersecurity) Setup}
+%    \begin{itemize}
+%        \item problem: identification/hunting malicious actors in networks
+%        \item big (confidential) data
+%        \item noisy labels possibly changing in time
+%        \item heavily class imbalanced problems 
+%        \item need for a simple flexible well scaling algorithm
+%    \end{itemize}       
+%\end{frame}
+
+\begin{frame}
+    \frametitle{Motivation -- Hunting for Malicious Entities in Network}
+    \scalebox{0.8}{\input{images/motivation} }    
+\end{frame}
+
+% 1.5 min
+
+\begin{frame}
+    \frametitle{Convolutional Signal Propagation - Problem to Solve}
+    \begin{columns}    
+    \column{0.6\linewidth}
+    \begin{itemize}
+        \item Telemetry data
+        \item Positive domains: {\it{evil.com}}, {\it{ransomware.com}}
+        \item Unknown domains: other
+        \item<2-> \alert{Which of the unknown domains are positive?}
+        \item<3-> Tasks:
+        \begin{itemize}
+            \item Domain \emph{reputation} (score)
+            \item Domain \emph{retrieval} (rank)
+            \item Domain binary \emph{classification}
+        \end{itemize} 
+    \end{itemize}
+    \column{0.3\linewidth}
+    \small
+    \begin{tabular}{ll}
+    \toprule
+    Domain & User \\
+    \midrule
+    candidate.com & Alice \\
+    candidate.com & Charlie \\
+    evil.com & Alice \\
+    evil.com & Bob \\
+    evil.com & David \\
+    ransomware.com & Alice \\
+    ransomware.com & Bob \\
+    somedomain.ch & Bob \\
+    somedomain.ch & Charlie \\
+    unknown.com & Alice \\
+    unknown.com & David \\
+    \bottomrule
+    \end{tabular}    
+    \end{columns}
+\end{frame}
+
+% 3.5 min
+
+\begin{frame}
+    \frametitle{Convolutional Signal Propagation - Data Representation}
+    \scalebox{0.8}{
+    \input{images/csp_base_img}
+    }
+\end{frame}
+
+% 5 min
+
+\begin{frame}
+    \frametitle{Convolutional Signal Propagation - Algorithm Description}
+    \scalebox{0.8}{
+    \input{images/csp_algorithm}
+    }
+\end{frame}
+
+% 6 min
+
+\begin{frame}
+    \frametitle{Convolutional Signal Propagation - Algorithm Formulation}
+    \input{csp}   
+\end{frame}
+
+% 7 min
+
+\begin{frame}
+    \frametitle{Convolutional Signal Propagation - Discussion}
+    \begin{itemize}
+        \item Method suitable for malicious entity retrieval 
+        \item<2-> RQ1: How is CSP related to the other methods?
+        \item<2-> RQ2: Where can CSP be applied? 
+        \item<2-> RQ3: How does CSP perform compared to standard reference methods?
+        \item<3-> When should I consider to use CSP and why?
+    \end{itemize}
+\end{frame}
+
+% 8.5 min
+
+\begin{frame}
+    \frametitle{CSP Comparison with Other Methods}
+			\begin{itemize}
+                    \item CSP: ${\X^{(l+1)} = \D^{-1} \HH} \B^{-1} \HH^T \X^{(l)}$
+                    \item<2-> Naive Bayes
+                    \begin{itemize}
+                        \item Fitting binomial Naive Bayes in the 1st step ($\B^{-1} \HH^T \X^{(l)}$)
+                        \item Simple mean instead of product and Bayes rule in the 2nd step
+                    \end{itemize}
+			    \item<3-> Hyper-Graph Convolutional Network (HGCN)
+                        \begin{equation*}
+            \X^{(l+1)} = \sigma(\D^{−1} \HH \mathmat{W} \B^{−1} \HH^T \X^{(l)} \boldsymbol{\Theta}),
+        \end{equation*}
+         where \( \mathmat{W} \) and \( \boldsymbol{\Theta} \) are realized as non-learnable identity matrices.                    
+        			\end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{CSP Comparison with Label Propagation}
+			\begin{itemize}
+                    \item CSP: ${\X^{(l+1)} = \D^{-1} \HH} \B^{-1} \HH^T \X^{(l)}$
+                    \item<2-> Label Propagation
+                    \begin{equation*} 
+                        \Y^{(l+1)} = \alpha \D^{−1} \mathmat{A} \Y^{(l)} + \left( 1 - \alpha \right) \Y^{(l)}
+                    \end{equation*}
+                     with $\HH \B^{-1} \HH^T = \frac{1}{2}( \mathmat{A} + \D)$,
+                    \begin{equation*}
+                        \X^{(l+1)} = \frac{1}{2} \D^{-1} \mathmat{A} \X^{(l)} + \frac{1}{2} \X^{(l)}.
+                    \end{equation*}			    
+			\end{itemize}
+\end{frame}
+
+% 10 min
+
+\begin{frame}
+    \frametitle{Experiment Setup - Datasets}
+    \scalebox{0.82}{
+        \begin{tabular}{llllllll}
+        \toprule
+        \textbf{Dataset} & \textbf{Node} & \textbf{Node label} & \textbf{Hyper-edge} & \textbf{\#nodes} & \textbf{\#hyper-edges} & \textbf{\#bip.\ edges} & \textbf{\#classes} \\
+        \midrule
+        Cora-CA & paper & topic & author & 2708 & 1072  & 4585 & 7\\
+        Cora-CC & paper & topic & co-cited papers & 2708 & 1579  & 4786 &7\\
+        CiteSeer & paper & topic & co-cited papers& 3312 & 1079  & 3453 &6\\
+        DBLP & paper & topic & author& 41302 & 22363 & 99561 & 6\\
+        PubMed & paper & topic & co-cited papers& 19717 & 7963  & 34629 &3\\
+        Corona & text & sentiment & token& 44955 & 998  & 3455918 &5\\
+        movie-RA & movie & category & user& 62423 & 162541 & 25000095 &20\\
+        movie-TA & movie & category & tag& 62423 & 14592  & 1093360 &20\\
+        \bottomrule
+        \end{tabular}
+        }
+\end{frame}
+
+% 11.5 min
+
+\begin{frame}
+    \frametitle{Experiment Setup}
+    \begin{itemize}
+        \item Tasks related to each class:
+        \begin{itemize}
+            \item Retrieval (10\% train 90\% test split)
+            \item Binary classification (90\% train 10\% test split)
+        \end{itemize}
+        \item Considered methods:
+        \begin{itemize}
+            \item Convolutional Signal Propagation (1,2 and 3 layers)
+            \item Naive Bayes operating with one hot features
+            \item Random forest, logistic regression, HGCN with NMF
+        \end{itemize}
+        \item LOOCV with 10 random folds
+    \end{itemize}
+\end{frame}
+
+% 12.5 min
+
+\begin{frame}
+\frametitle{Average ROC-AUC for Binary Classification Task}
+\scalebox{0.75}{
+    \begin{tabular}{lrrrrrrrr}
+        \toprule
+        \textbf{Method} & \textbf{CiteSeer} & \textbf{Cora-CA} & \textbf{Cora-CC} & \textbf{DBLP} & \textbf{PubMed} & \textbf{Corona} & \textbf{movie-RA} & \textbf{movie-TA} \\
+        \midrule
+        \textbf{\method{} 1-layer} & \underline{0.646} & \underline{0.882} & 0.716 & \underline{0.968} & 0.537 & \textbf{0.704} & \underline{0.789} & \underline{0.717} \\
+        \textbf{\method{} 2-layer} & 0.630 & \underline{0.872} & 0.686 & \underline{0.972} & 0.518 & 0.618 & 0.700 & \underline{0.697} \\       
+        \textbf{\method{} 3-layer} & 0.613 & 0.862 & 0.655 & \underline{0.972} & 0.516 & 0.580 & 0.640 & 0.673 \\
+        \textbf{Naive Bayes} & \textbf{0.686} & \textbf{0.913} & \underline{0.775} & \textbf{0.974} & \textbf{0.633} & \textbf{0.704} & \underline{0.753} & 0.557 \\   
+        \textbf{HGCN-NMF} & \underline{0.659} & 0.832 & \textbf{0.786} & 0.775 & \underline{0.624} & 0.622 & \underline{0.794} & \textbf{0.724} \\
+        \textbf{LR-NMF} & 0.604 & 0.794 & 0.703 & 0.705 & 0.556 & 0.647 & \underline{0.754} & \underline{0.675} \\
+        \textbf{RF-NMF} & \underline{0.667} & \underline{0.897} & \underline{0.772} & 0.905 & \underline{0.623} & 0.617 & \textbf{0.797} & \underline{0.691} \\
+        \textbf{Random} & 0.499 & 0.505 & 0.489 & 0.501 & 0.502 & 0.503 & 0.499 & 0.487 \\
+        \bottomrule
+    \end{tabular}
+}
+\end{frame}
+
+% 13 min
+
+\begin{frame}
+\frametitle{Average P@100 for Retrieval Task}
+\scalebox{0.75}{
+    \begin{tabular}{lrrrrrrrr}
+        \toprule
+        \textbf{Method} & \textbf{CiteSeer} & \textbf{Cora-CA} & \textbf{Cora-CC} & \textbf{DBLP} & \textbf{PubMed} & \textbf{Corona} &\textbf{movie-RA} & \textbf{movie-TA} \\
+        \midrule
+        \textbf{\method{} 1-layer} & 0.494 & \underline{0.703} & 0.530 & 0.869 & 0.798 & \textbf{0.530} & 0.334 & 0.156 \\
+        \textbf{\method{} 2-layer} & \underline{0.558} & \underline{0.718} & \underline{0.681} & 0.865 & \underline{0.826} & 0.440 & 0.336 & 0.186 \\       
+        \textbf{\method{} 3-layer} & \textbf{0.568} & \textbf{0.721} & \textbf{0.707} & 0.869 & \underline{0.850} & 0.332 & 0.238 & 0.186 \\       
+        \textbf{Naive Bayes} & 0.471 & \underline{0.686} & 0.491 & \textbf{0.951} & \underline{0.860} & 0.446 & 0.216 & 0.153 \\
+        \textbf{HGCN-NMF} & 0.482 & \underline{0.671} & 0.607 & 0.794 & \textbf{0.871} & 0.392 & 0.257 & 0.148 \\
+        \textbf{LR-NMF} & 0.329 & 0.603 & 0.372 & 0.602 & 0.735 & 0.397 & \textbf{0.580} & \textbf{0.356} \\
+        \textbf{RF-NMF} & 0.303 & 0.474 & 0.482 & 0.843 & 0.794 & 0.381 & 0.470 & 0.131 \\
+        \textbf{Random} & 0.153 & 0.132 & 0.129 & 0.155 & 0.308 & 0.180 & 0.040 & 0.055 \\
+        \bottomrule
+    \end{tabular}
+}
+\end{frame}
+
+% 13.5 min
+
+\begin{frame}
+\frametitle{Execution Time in Microseconds}
+\scalebox{0.75}{
+     \begin{tabular}{lrrrrrrrr}
+        \toprule
+        \textbf{Method} & \textbf{CiteSeer} & \textbf{Cora-CA} & \textbf{Cora-CC} & \textbf{DBLP} & \textbf{PubMed} & \textbf{Corona} & \textbf{movie-RA} & \textbf{movie-TA} \\
+        \midrule
+        \textbf{\method{} 1-layer} & \textbf{1.35} & \textbf{1.23} & \textbf{1.24} & \textbf{3.51} & \textbf{4.01} & \textbf{22.83} & 170.63 & \textbf{12.07} \\             
+        \textbf{\method{} 2-layer} & 2.41 & 2.25 & 2.24 & 7.46 & 7.35 & 47.39 & 349.67 & 25.88 \\
+        \textbf{\method{} 3-layer} & 3.31 & 3.09 & 3.08 & 9.65 & 9.1 & 70.98 & 506.1 & 35.75 \\
+        \textbf{Naive Bayes} & 2.59 & 2.73 & 2.54 & 11.16 & 5.35 & 89.3 & 1 051.53 & 35.61 \\
+        \textbf{*HGCN-NMF} & 23 714 & 23 690 & 23 709 & 29 123 & 23 879 & 112 314 & 620 717 & 70 778 \\
+        \textbf{*LR-NMF} & 44.45 & 51.59 & 49.54 & 64.96 & 44.69 & 56 & \textbf{61.82} & 74.07 \\
+        \textbf{*RF-NMF} & 140.76 & 143.85 & 134.52 & 1 148.83 & 323.6 & 1 608.58 & 697.85 & 716.68 \\
+        \bottomrule
+    \end{tabular} 
+    }    
+    
+    *NMF processing is not included in evaluation of the time duration
+\end{frame}
+
+% 14 min
+
+\begin{frame}
+\frametitle{Conclusions}
+    \begin{itemize}
+        \item Method suitable for malicious entity retrieval 
+        \item<2-> RQ1: How is CSP related to the other methods?
+        \begin{itemize}
+            \item Alternative way of NB inference
+            \item Extension of label propagation for hypergraphs
+            \item special case of forward pass of HGCN
+        \end{itemize}
+        \item<3-> RQ2: Where can CSP be applied? 
+        Learning method for classification and retrieval on graphs, hyper-graphs or problems described by one-hot features.       
+        \item<4-> RQ3: How does CSP perform compared to standard reference methods? Comparable performance while being significantly cheaper to compute.
+        \item<5> When should I consider to use CSP and why?
+    \end{itemize}
+\end{frame}
+
+% 15 min
+
+\end{document}

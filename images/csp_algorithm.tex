@@ -1,0 +1,340 @@
+\begin{tikzpicture}
+\tikzset{node/.style={draw,circle}}
+\tikzset{edge/.style={draw,rectangle,inner sep=2pt}}
+
+\tikzset{nodepos/.style={draw,circle, fill=red!20!white}}
+\tikzset{nodestress/.style={draw,circle, ultra thick}}
+
+
+
+
+%% Bipartite Graph
+\uncover<1>{
+\begin{scope}[node distance=1.5cm, circle, draw=black]
+	\node[nodepos] at (0, -2) (x1) {$\uu_1$};
+    \node[nodepos, below of=x1] (x2) {$\uu_2$};
+    \node[nodestress, below of=x2] (x3) {$\uu_3$};
+    \node[node, below of=x3] (x4) {$\uu_4$};
+    \node[node, below of=x4] (x5) {$\uu_5$};
+\end{scope}
+    
+\begin{scope}[node distance=2cm]
+	\node[node] at (3, -2) (e1) {$\vv_1$};
+    \node[node, below of=e1] (e2) {$\vv_2$};
+    \node[node, below of=e2] (e3) {$\vv_3$};
+    \node[node, below of=e3] (e4) {$\vv_4$};
+\end{scope}
+
+  \draw (e1) -- (x3);
+  \draw (e1) -- (x1);
+  \draw (e1) -- (x2);
+  \draw (e2) -- (x2);
+  \draw (e2) -- (x1);
+  \draw (e4) -- (x1);
+  \draw (e1) -- (x5);
+  \draw (e2) -- (x4);
+  \draw (e4) -- (x3);
+  \draw (e3) -- (x4);
+  \draw (e3) -- (x5);
+}
+
+\uncover<2-3>{
+\begin{scope}[node distance=1.5cm, circle, draw=black]
+	\node[nodepos, opacity=0.2] at (0, -2) (x1) {$\uu_1$};
+    \node[nodepos, opacity=0.2, below of=x1] (x2) {$\uu_2$};
+    \node[nodestress, below of=x2] (x3) {$\uu_3$};
+    \node[node, opacity=0.2, below of=x3] (x4) {$\uu_4$};
+    \node[node, opacity=0.2, below of=x4] (x5) {$\uu_5$};
+\end{scope}
+    
+\begin{scope}[node distance=2cm]
+    \node[node] at (3, -2) (e1) {$\vv_1$};
+    \node[node, below of=e1, opacity=0.2] (e2) {$\vv_2$};
+    \node[node, below of=e2, opacity=0.2] (e3) {$\vv_3$};
+    \node[node, below of=e3] (e4) {$\vv_4$};
+\end{scope}
+
+  \draw (e1) -- (x3);
+  \draw[opacity=0.2] (e1) -- (x1);
+  \draw[opacity=0.2] (e1) -- (x2);
+  \draw[opacity=0.2] (e2) -- (x2);
+  \draw[opacity=0.2] (e2) -- (x1);
+  \draw[opacity=0.2] (e4) -- (x1);
+  \draw[opacity=0.2] (e1) -- (x5);
+  \draw[opacity=0.2] (e2) -- (x4);
+  \draw (e4) -- (x3);
+  \draw[opacity=0.2] (e3) -- (x4);
+  \draw[opacity=0.2] (e3) -- (x5);
+}
+
+\uncover<4-5>{
+\begin{scope}[node distance=1.5cm, circle, draw=black]
+    \node[nodepos] at (0, -2) (x1) {$\uu_1$};
+    \node[nodepos, below of=x1] (x2) {$\uu_2$};
+    \node[node, below of=x2] (x3) {$\uu_3$};
+    \node[node, opacity=0.2, below of=x3] (x4) {$\uu_4$};
+    \node[node, below of=x4] (x5) {$\uu_5$};
+\end{scope}
+    
+\begin{scope}[node distance=2cm]
+    \node[nodestress] at (3, -2) (e1) {$\vv_1$};
+    \node[node, below of=e1, opacity=0.2] (e2) {$\vv_2$};
+    \node[node, below of=e2, opacity=0.2] (e3) {$\vv_3$};
+    \node[nodestress, below of=e3] (e4) {$\vv_4$};
+\end{scope}
+
+  \draw (e1) -- (x3);
+  \draw (e1) -- (x1);
+  \draw (e1) -- (x2);
+  \draw[opacity=0.2] (e2) -- (x2);
+  \draw[opacity=0.2] (e2) -- (x1);
+  \draw (e4) -- (x1);
+  \draw (e1) -- (x5);
+  \draw[opacity=0.2] (e2) -- (x4);
+  \draw (e4) -- (x3);
+  \draw[opacity=0.2] (e3) -- (x4);
+  \draw[opacity=0.2] (e3) -- (x5);
+}
+%% Hyper-Graph
+
+\uncover<1>{
+\begin{scope}[xshift=7cm, yshift=-5cm]
+    \node[nodepos] at (0:2) (xx2) {$\uu_2$};
+    \node[nodepos] at (72:2)(xx1) {$\uu_1$};
+    \node[nodestress] at (144:2)(xx3) {$\uu_3$};
+    \node[node] at (216:2)(xx5) {$\uu_5$};
+    \node[node] at (288:2)(xx4) {$\uu_4$};
+
+    %\node[edge] at (40:0.65) (ee2) {$e_2$};
+    %\node[edge] at (105:0.65)(ee4) {$e_4$};
+    %\node[edge] at (255:0.6)(ee3) {$e_3$};
+    %\node[edge] at (0:0) (ee1) {$e_1$};
+\end{scope}
+
+  %\draw (ee1) -- (xx3);
+  %\draw (ee1) -- (xx1);
+  %\draw (ee1) -- (xx2);
+  %\draw (ee2) -- (xx2);
+  %\draw (ee2) -- (xx1);
+  %\draw (ee4) -- (xx1);
+  %\draw (ee1) -- (xx5);
+  %\draw (ee2) -- (xx4);
+  %\draw (ee4) -- (xx3);
+  %\draw (ee3) -- (xx4);
+  %\draw (ee3) -- (xx5);
+
+\begin{scope}[fill opacity=0.2]
+    \filldraw[fill=yellow!20] ($(xx1)+(0.5,0)$) 
+        to[out=90,in=0] ($(xx1) + (0,0.5)$) 
+        to[out=180,in=70] ($(xx3) + (-0.5,0)$) 
+        to[out=250,in=210] ($(xx3) + (0,-0.5)$)
+        to[out=30,in=270] ($(xx1) + (0.5,0)$);
+    \filldraw[fill=green!20] ($(xx5)+(-0.5,0)$) 
+        to[out=250,in=180] ($(xx5) + (0,-0.5)$) 
+        to[out=0,in=210] ($(xx4) + (0,-0.5)$) 
+        to[out=30,in=290] ($(xx4) + (0.5, 0)$)
+        to[out=110,in=70] ($(xx5) + (-0.5,0)$);
+    \filldraw[fill=cyan!20] ($(xx1)+(-0.5,0)$) 
+        to[out=270,in=90] ($(xx4) + (-0.5,0)$) 
+        to[out=270,in=180] ($(xx4) + (0,-0.5)$) 
+        to[out=0,in=270] ($(xx2) + (0.5,0)$) 
+        to[out=90,in=0] ($(xx1) + (0, 0.5)$)
+        to[out=180,in=90] ($(xx1) + (-0.5, 0)$);
+    \filldraw[fill=gray!20] ($(xx1)+(0,0.5)$) 
+        to[out=180,in=90] ($(xx3) + (-0.5,0)$) 
+        to[out=270,in=210] ($(xx5) + (0,-0.5)$) 
+        to[out=30,in=270] ($(xx2) + (0.5,0)$) 
+        to[out=90,in=0] ($(xx1) + (0, 0.5)$);
+\end{scope}
+}
+\uncover<2-3>{
+\begin{scope}[xshift=7cm, yshift=-5cm]
+    \node[nodepos, opacity=0.2] at (0:2) (xx2) {$\uu_2$};
+    \node[nodepos, opacity=0.2] at (72:2)(xx1) {$\uu_1$};
+    \node[nodestress] at (144:2)(xx3) {$\uu_3$};
+    \node[node, opacity=0.2] at (216:2)(xx5) {$\uu_5$};
+    \node[node, opacity=0.2] at (288:2)(xx4) {$\uu_4$};
+
+    %\node[edge] at (40:0.65) (ee2) {$e_2$};
+    %\node[edge] at (105:0.65)(ee4) {$e_4$};
+    %\node[edge] at (255:0.6)(ee3) {$e_3$};
+    %\node[edge] at (0:0) (ee1) {$e_1$};
+\end{scope}
+
+  %\draw (ee1) -- (xx3);
+  %\draw (ee1) -- (xx1);
+  %\draw (ee1) -- (xx2);
+  %\draw (ee2) -- (xx2);
+  %\draw (ee2) -- (xx1);
+  %\draw (ee4) -- (xx1);
+  %\draw (ee1) -- (xx5);
+  %\draw (ee2) -- (xx4);
+  %\draw (ee4) -- (xx3);
+  %\draw (ee3) -- (xx4);
+  %\draw (ee3) -- (xx5);
+
+\begin{scope}[fill opacity=0.2]
+    \filldraw[fill=yellow!20] ($(xx1)+(0.5,0)$) 
+        to[out=90,in=0] ($(xx1) + (0,0.5)$) 
+        to[out=180,in=70] ($(xx3) + (-0.5,0)$) 
+        to[out=250,in=210] ($(xx3) + (0,-0.5)$)
+        to[out=30,in=270] ($(xx1) + (0.5,0)$);
+    \filldraw[fill=gray!20] ($(xx1)+(0,0.5)$) 
+        to[out=180,in=90] ($(xx3) + (-0.5,0)$) 
+        to[out=270,in=210] ($(xx5) + (0,-0.5)$) 
+        to[out=30,in=270] ($(xx2) + (0.5,0)$) 
+        to[out=90,in=0] ($(xx1) + (0, 0.5)$);
+\end{scope}
+}
+
+\uncover<4->{
+\begin{scope}[xshift=7cm, yshift=-5cm]
+    \node[nodepos] at (0:2) (xx2) {$\uu_2$};
+    \node[nodepos] at (72:2)(xx1) {$\uu_1$};
+    \node[node] at (144:2)(xx3) {$\uu_3$};
+    \node[node] at (216:2)(xx5) {$\uu_5$};
+    \node[node, opacity=0.2] at (288:2)(xx4) {$\uu_4$};
+
+    %\node[edge] at (40:0.65) (ee2) {$e_2$};
+    %\node[edge] at (105:0.65)(ee4) {$e_4$};
+    %\node[edge] at (255:0.6)(ee3) {$e_3$};
+    %\node[edge] at (0:0) (ee1) {$e_1$};
+\end{scope}
+
+  %\draw (ee1) -- (xx3);
+  %\draw (ee1) -- (xx1);
+  %\draw (ee1) -- (xx2);
+  %\draw (ee2) -- (xx2);
+  %\draw (ee2) -- (xx1);
+  %\draw (ee4) -- (xx1);
+  %\draw (ee1) -- (xx5);
+  %\draw (ee2) -- (xx4);
+  %\draw (ee4) -- (xx3);
+  %\draw (ee3) -- (xx4);
+  %\draw (ee3) -- (xx5);
+
+\begin{scope}[fill opacity=0.2]
+    \filldraw[fill=yellow!20] ($(xx1)+(0.5,0)$) 
+        to[out=90,in=0] ($(xx1) + (0,0.5)$) 
+        to[out=180,in=70] ($(xx3) + (-0.5,0)$) 
+        to[out=250,in=210] ($(xx3) + (0,-0.5)$)
+        to[out=30,in=270] ($(xx1) + (0.5,0)$);
+    \filldraw[fill=gray!20] ($(xx1)+(0,0.5)$) 
+        to[out=180,in=90] ($(xx3) + (-0.5,0)$) 
+        to[out=270,in=210] ($(xx5) + (0,-0.5)$) 
+        to[out=30,in=270] ($(xx2) + (0.5,0)$) 
+        to[out=90,in=0] ($(xx1) + (0, 0.5)$);
+\end{scope}
+}
+
+\begin{scope}[xshift=13cm, yshift=-3cm]
+\uncover<1>{
+\node at (0,0) {
+    $\HH=\left[\begin{array}{cccc}
+ 1 & 1 & 0 & 1 \\
+ 1 & 1 & 0 & 0 \\
+ 1 & 0 & 0 & 1 \\
+ 0 & 1 & 1 & 0 \\
+ 1 & 0 & 1 & 0 
+     \end{array}
+     \right]$, $\mathmat{Y}=\left[\begin{array}{c}
+ 1 \\
+ 1 \\
+ 0 \\
+ 0 \\
+ 0 
+     \end{array}
+     \right]$
+};
+}
+\uncover<2-3>{
+\node[opacity=0.2] at (0,0) {
+    $\HH=\left[\begin{array}{cccc}
+ 1 & 1 & 0 & 1 \\
+ 1 & 1 & 0 & 0 \\
+ 1 & 0 & 0 & 1 \\
+ 0 & 1 & 1 & 0 \\
+ 1 & 0 & 1 & 0 
+     \end{array}
+     \right]$, $\mathmat{Y}=\left[\begin{array}{c}
+ 1 \\
+ 1 \\
+ 0 \\
+ 0 \\
+ 0 
+     \end{array}
+     \right]$
+};
+\node at (0,0) {
+    $\mathmat{H}=\left[\begin{array}{cccc}
+ \phantom{1} & \phantom{1} & \phantom{0} & \phantom{1} \\
+ \phantom{1} & \phantom{1} & \phantom{0} & \phantom{0} \\
+ 1 & 0 & 0 & 1 \\
+ \phantom{0} & \phantom{1} & \phantom{1} & \phantom{0} \\
+ \phantom{1} & \phantom{0} & \phantom{1} & \phantom{0}
+     \end{array}
+     \right]$, $\mathmat{Y}=\left[\begin{array}{c}
+ \phantom{1} \\
+ \phantom{1} \\
+ 0 \\
+ \phantom{0} \\
+ \phantom{0} 
+     \end{array}
+     \right]$
+};
+}
+\uncover<4-5>{
+\node[opacity=0.2] at (0,0) {
+    $\HH=\left[\begin{array}{cccc}
+ 1 & 1 & 0 & 1 \\
+ 1 & 1 & 0 & 0 \\
+ 1 & 0 & 0 & 1 \\
+ 0 & 1 & 1 & 0 \\
+ 1 & 0 & 1 & 0 
+     \end{array}
+     \right]$, $\mathmat{Y}=\left[\begin{array}{c}
+ 1 \\
+ 1 \\
+ 0 \\
+ 0 \\
+ 0 
+     \end{array}
+     \right]$
+};
+\node at (0,0) {
+    $\mathmat{H}=\left[\begin{array}{cccc}
+ 1 & \phantom{1} & \phantom{0} & 1 \\
+ 1 & \phantom{1} & \phantom{0} & 0 \\
+ 1 & \phantom{0} & \phantom{0} & 1 \\
+ 0 & \phantom{1} & \phantom{1} & 0 \\
+ 1 & \phantom{0} & \phantom{1} & 0
+     \end{array}
+     \right]$, $\mathmat{Y}=\left[\begin{array}{c}
+ 1 \\
+ 1 \\
+ 0 \\
+ 0 \\
+ 0 
+     \end{array}
+     \right]$
+};
+}
+\end{scope}
+
+
+\begin{scope}[xshift=13cm, yshift=-6cm, node distance=1.9cm]
+\uncover<3->{
+\node [text width=5cm, fill=white] (eq1) {\begin{equation*}
+s_{\uu_3}=\frac{s_{\vv_1} + s_{\vv_4}}{2}=\frac{1}{deg\left( \uu_3 \right)}\sum_{\substack{\vv_j \\ \uu_3 \in \vv_j}}s_{\vv_j}
+\end{equation*}};
+}
+\uncover<5->{
+\node [text width=5cm, below of=eq1, fill=white] (eq2) {\begin{equation*}
+s_{\vv_1}=\frac{y_1+y_2+y_3+y_5}{4}=\frac{1}{deg\left( \vv_1 \right)}\sum_{\substack{j \\ \uu_j \in \vv_1}}y_j
+\end{equation*}};
+\node [text width=5cm, below of=eq2, fill=white] (eq3) {\begin{equation*}
+s_{\vv_4}=\frac{y_1+y_3}{2}=\frac{1}{deg\left( \vv_4 \right)}\sum_{\substack{j \\ \uu_j \in \vv_4}}y_j
+\end{equation*}};
+}
+\end{scope}
+\end{tikzpicture}
